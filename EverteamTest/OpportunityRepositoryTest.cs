@@ -1,16 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace EverteamTest
 {
     [TestClass]
-    public class UnitTest1
+    public class OpportunityRepositoryTest
     {
         [TestMethod]
         public void TestMethod1()
         {
-            JsonConvert
         }
     }
 }
