@@ -175,18 +175,6 @@ namespace Everteam.Repository
                 parameters.Add("@OpportunityStatus", opportunity.OpportunityStatus.ToString());
                 parameters.Add("@OpportunityId", opportunity.OpportunityId.ToString());
                 _repositoryConnection.SimpleExecuteCommand("UpdateOpportunity", parameters);
-
-                var career = opportunity.Career;
-                _careerRepository.UpdateCareer(career);
-
-                var service = opportunity.Service;
-                _serviceRepository.UpdateService(service);
-
-                var professionalLevel = opportunity.ProfessionalLevel;
-                _professionalLevelRepository.UpdateProfessionalLevel(professionalLevel);
-
-                var opportunityType = opportunity.OpportunityType;
-                _opportunityTypeRepository.UpdateOpportunityType(opportunityType);
             }
             catch(Exception ex)
             {
@@ -198,18 +186,6 @@ namespace Everteam.Repository
         {
             parameters.Add("@OpportunityId", opportunity.OpportunityId.ToString());
             _repositoryConnection.SimpleExecuteCommand("DeleteOpportunity", parameters);
-
-            var career = opportunity.Career;
-            _careerRepository.DeleteCareer(career);
-
-            var service = opportunity.Service;
-            _serviceRepository.DeleteService(service);
-
-            var professionalLevel = opportunity.ProfessionalLevel;
-            _professionalLevelRepository.DeleteProfessionalLevel(professionalLevel);
-
-            var opportunityType = opportunity.OpportunityType;
-            _opportunityTypeRepository.DeleteOpportunityType(opportunityType);
         }
     }
 }
