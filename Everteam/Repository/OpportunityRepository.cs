@@ -153,7 +153,6 @@ namespace Everteam.Repository
                 parameters.Add("@ServiceId", opportunity.Service.ServiceId.ToString());
                 parameters.Add("@OpportunityTypeId", opportunity.OpportunityType.OpportunityTypeId.ToString());
 
-
                 _repositoryConnection.SimpleExecuteCommand("InsertOpportunity", parameters);
             }
             catch(Exception ex)
@@ -174,6 +173,7 @@ namespace Everteam.Repository
                 parameters.Add("@CancellationDate", opportunity.CancellationDate.ToString());
                 parameters.Add("@OpportunityStatus", opportunity.OpportunityStatus.ToString());
                 parameters.Add("@OpportunityId", opportunity.OpportunityId.ToString());
+
                 _repositoryConnection.SimpleExecuteCommand("UpdateOpportunity", parameters);
             }
             catch(Exception ex)
