@@ -40,6 +40,5 @@ namespace Everteam.Services
         {
             _opportunityRepository.DeleteOpportunity(opportunity);
         }
-
     }
 }
