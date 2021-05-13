@@ -1,23 +1,25 @@
-﻿using Everteam.Interfaces;
+﻿using Everteam.Controllers;
+using Everteam.Interfaces;
 using Everteam.Models;
-using Everteam.Services;
+using Everteam.Repository;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace EverteamTest
 {
     [TestClass]
-    public class OpportunityServiceTest
+    public class OpportunityControllerTest
     {
-        private readonly Mock<IOpportunityRepository> _opportunityRepositoryMock;
+        private readonly Mock<IOpportunityService> _opportunityServiceMock;
 
-        public OpportunityServiceTest()
+        public OpportunityControllerTest()
         {
-            _opportunityRepositoryMock = new Mock<IOpportunityRepository>();
+            _opportunityServiceMock = new Mock<IOpportunityService>();
         }
 
         [TestMethod]
@@ -54,16 +56,21 @@ namespace EverteamTest
                     }
                 ]";
 
-            var listOpporunities = JsonConvert.DeserializeObject<List<Opportunity>>(jsonDataTable);
+            var listOpportunities = JsonConvert.DeserializeObject<List<Opportunity>>(jsonDataTable);
 
-            _opportunityRepositoryMock.Setup(x => x.GetAllOpportunities()).Returns(listOpporunities);
+            _opportunityServiceMock.Setup(x => x.GetAllOpportunities()).Returns(listOpportunities);
 
-            var service = new OpportunityService(_opportunityRepositoryMock.Object);
+            var control = new OpportunityController(_opportunityServiceMock.Object);
 
-            var result = service.GetAllOpportunities();
+            var result = control.GetAllOpportunities();
 
-            Assert.IsNotNull(result);
+            var okResult = result as OkObjectResult;
+
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
         }
+
+
 
         [TestMethod]
         public void GetOpportunityByName_Ok()
@@ -88,13 +95,31 @@ namespace EverteamTest
 
             var opportunityName = "Squad Care";
 
-            _opportunityRepositoryMock.Setup(x => x.GetOpportunityByName(opportunityName)).Returns(opportunity);
+            _opportunityServiceMock.Setup(x => x.GetOpportunityByName(opportunityName)).Returns(opportunity);
 
-            var service = new OpportunityService(_opportunityRepositoryMock.Object);
+            var control = new OpportunityController(_opportunityServiceMock.Object);
 
-            var result = service.GetOpportunityByName(opportunityName);
+            var result = control.GetOpportunityByName(opportunityName);
 
-            Assert.IsNotNull(result);
+            var okResult = result as OkObjectResult;
+
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+        [TestMethod]
+        public void GetOpportunityByName_BadRequest()
+        {
+
+            var opportunityName = "";
+
+            var control = new OpportunityController(_opportunityServiceMock.Object);
+
+            var result = control.GetOpportunityByName(opportunityName);
+
+            var badRequestResult = result as BadRequestResult;
+
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [TestMethod]
@@ -125,11 +150,29 @@ namespace EverteamTest
 
             var opportunity = JsonConvert.DeserializeObject<Opportunity>(jsonOpportunity);
 
-            var service = new OpportunityService(_opportunityRepositoryMock.Object);
+            var control = new OpportunityController(_opportunityServiceMock.Object);
 
-            service.InsertOpportunity(opportunity);
+            var result = control.InsertOpportunity(opportunity);
 
-            Assert.IsTrue(true);
+            var okResult = result as OkResult;
+
+            Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+        [TestMethod]
+        public void InsertOpportunity_BadRequest()
+        {
+            var jsonOpportunity = @"";
+
+            var opportunity = JsonConvert.DeserializeObject<Opportunity>(jsonOpportunity);
+
+            var control = new OpportunityController(_opportunityServiceMock.Object);
+
+            var result = control.InsertOpportunity(opportunity);
+
+            var badRequestResult = result as BadRequestResult;
+
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [TestMethod]
@@ -148,27 +191,63 @@ namespace EverteamTest
 
             var opportunity = JsonConvert.DeserializeObject<Opportunity>(jsonOpportunity);
 
-            var service = new OpportunityService(_opportunityRepositoryMock.Object);
+            var control = new OpportunityController(_opportunityServiceMock.Object);
 
-            service.UpdateOpportunity(opportunity);
+            var result = control.UpdateOpportunity(opportunity);
 
-            Assert.IsTrue(true);
+            var okResult = result as OkResult;
+
+            Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+        [TestMethod]
+        public void UpdateOpportunity_BadRequest()
+        {
+            var jsonOpportunity = @"";
+
+            var opportunity = JsonConvert.DeserializeObject<Opportunity>(jsonOpportunity);
+
+            var control = new OpportunityController(_opportunityServiceMock.Object);
+
+            var result = control.UpdateOpportunity(opportunity);
+
+            var badRequestResult = result as BadRequestResult;
+
+            Assert.AreEqual(400, badRequestResult.StatusCode);
         }
 
         [TestMethod]
         public void DeleteOpportunity_Ok()
         {
             var jsonOpportunity = @"{      
-                'OpportunityId': 0
+                'OpportunityId': 1
                 }";
 
             var opportunity = JsonConvert.DeserializeObject<Opportunity>(jsonOpportunity);
 
-            var service = new OpportunityService(_opportunityRepositoryMock.Object);
+            var control = new OpportunityController(_opportunityServiceMock.Object);
 
-            service.DeleteOpportunity(opportunity);
+            var result = control.DeleteOpportunity(opportunity);
 
-            Assert.IsTrue(true);
+            var okResult = result as OkResult;
+
+            Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+        [TestMethod]
+        public void DeleteOpportunity_BadRequest()
+        {
+            var jsonOpportunity = @"";
+
+            var opportunity = JsonConvert.DeserializeObject<Opportunity>(jsonOpportunity);
+
+            var control = new OpportunityController(_opportunityServiceMock.Object);
+
+            var result = control.DeleteOpportunity(opportunity);
+
+            var badResquestResult = result as BadRequestResult;
+
+            Assert.AreEqual(400, badResquestResult.StatusCode);
         }
     }
 }

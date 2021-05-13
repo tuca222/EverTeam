@@ -24,6 +24,7 @@ namespace Everteam.Controllers
         public IActionResult GetAllOpportunities()
         {
             var listOpportunities = _opportunity.GetAllOpportunities();
+
             return Ok(listOpportunities);
         }
 
