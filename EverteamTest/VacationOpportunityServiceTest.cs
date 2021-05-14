@@ -90,6 +90,49 @@ namespace EverteamTest
         }
 
         [TestMethod]
+        public void GetVacationOpportunityByOpeningDate_Ok()
+        {
+            var jsonDataTable = @"[
+                    {
+                        'VacationOpportunityId': '1',
+                        'VacationOpeningNumber': 'PRE - 2020 - 0001234',
+                        'VacationOpeningDate': '2021-05-05',
+                        'VacationOfferLetterDate':'2021-05-05',
+                        'VacationLeader': 'Thomas Anjos',
+                        'VacationCancellationdate': '2021-05-05',
+                        'VacationOpportunityStatus': 'true',
+                        'CareerId': '1',
+                        'ProfessionalLevelId': '1',
+                        'OpportunityTypeId': '1',
+                    },
+                    {
+                        'VacationOpportunityId': '2',
+                        'VacationOpeningNumber': 'PRE - 2020 - 0001234',
+                        'VacationOpeningDate': '2021-05-05',
+                        'VacationOfferLetterDate':'2021-05-05',
+                        'VacationLeader': 'Thomas Anjos',
+                        'VacationCancellationdate': '2021-05-05',
+                        'VacationOpportunityStatus': 'false',
+                        'CareerId': '1',
+                        'ProfessionalLevelId': '1',
+                        'OpportunityTypeId': '1',
+                    }
+                ]";
+
+            var listVacationOpportunities = JsonConvert.DeserializeObject<List<VacationOpportunity>>(jsonDataTable);
+
+            var openingDate = DateTime.Parse("2021-05-05");
+
+            _VacationOpportunityRepository.Setup(x => x.GetVacationOpportunityByOpeningDate(openingDate)).Returns(listVacationOpportunities);
+
+            var service = new VacationOpportunityService(_VacationOpportunityRepository.Object);
+
+            var result = service.GetVacationOpportunityByOpeningDate(openingDate);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public void InsertVacationOpportunity_Ok()
         {
             var jsonVacationOpportunity = @"{

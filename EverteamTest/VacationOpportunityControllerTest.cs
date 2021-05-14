@@ -114,6 +114,58 @@ namespace EverteamTest
         }
 
         [TestMethod]
+        public void GetVacationOpportunityByOpeningDate_Ok()
+        {
+            var jsonDataTable = @"[
+                    {
+                        'VacationOpportunityId': '1',
+                        'VacationOpeningNumber': 'PRE - 2020 - 0001234',
+                        'VacationOpeningDate': '2021-05-05',
+                        'VacationOfferLetterDate':'2021-05-05',
+                        'VacationLeader': 'Thomas Anjos',
+                        'VacationCancellationdate': '2021-05-05',
+                        'VacationOpportunityStatus': 'true',
+                        'CareerId': '1',
+                        'ProfessionalLevelId': '1',
+                        'OpportunityTypeId': '1',
+                    },
+                    {
+                        'VacationOpportunityId': '2',
+                        'VacationOpeningNumber': 'PRE - 2020 - 0001234',
+                        'VacationOpeningDate': '2021-05-05',
+                        'VacationOfferLetterDate':'2021-05-05',
+                        'VacationLeader': 'Thomas Anjos',
+                        'VacationCancellationdate': '2021-05-05',
+                        'VacationOpportunityStatus': 'false',
+                        'CareerId': '1',
+                        'ProfessionalLevelId': '1',
+                        'OpportunityTypeId': '1',
+                    }
+                ]";
+
+            var listVacatioOpportunity = JsonConvert.DeserializeObject<List<VacationOpportunity>>(jsonDataTable);
+
+            DateTime opegingDate = DateTime.Parse("2021-05-05");
+
+            _vacationOpportunityServiceMock.Setup(x => x.GetVacationOpportunityByOpeningDate(opegingDate)).Returns(listVacatioOpportunity);
+
+            var control = new VacationOpportunityController(_vacationOpportunityServiceMock.Object);
+
+            var result = control.GetVacationOpportunityByOpeningDate(opegingDate);
+
+            var okResult = result as OkObjectResult;
+
+            Assert.IsNotNull(okResult);
+            Assert.AreEqual(200, okResult.StatusCode);
+        }
+
+        [TestMethod]
+        public void GetVacationOpportunityByOpeningDate_BadRequest()
+        {
+
+        }
+
+        [TestMethod]
         public void InsertVacationOpportunity_Ok()
         {
             var jsonVacationOpportunity = @"{

@@ -40,9 +40,6 @@ namespace Everteam.Controllers
         [HttpGet("{vacationOpeningDate}")]
         public  IActionResult GetVacationOpportunityByOpeningDate(DateTime vacationOpeningDate)
         {
-            if (vacationOpeningDate == null)
-                return BadRequest();
-
             var listVacationOpportunities = _vacationOpportunity.GetVacationOpportunityByOpeningDate(vacationOpeningDate);
             return Ok(listVacationOpportunities);
         }
